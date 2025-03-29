@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <title>Title</title>
+</head>
+<body>
+list
+<div>
+    <button onclick="listBoard()"> 목록보기 </button>
+</div>
+
+
+<script>
+    function  listBoard(){
+        $.ajax({
+            url: "/api/board/list",
+            method: "GET",
+            data:{},
+            success: (data, status, xhr) =>{
+                console.log(JSON.stringify(data));
+            },
+            error: (data, status, xhr) =>{
+                console.log(JSON.stringify(data));
+            },
+
+        });
+
+    }
+
+</script>
+
+
+</body>
+</html>

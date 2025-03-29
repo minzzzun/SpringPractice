@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>create</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+create
+
+<div>
+    title: <input type="text" id="input_title"/> <br/>
+    content: <input type="text" id="input_content"/> <br/>
+    <button onclick="createBoard()">작성하기!</button>
+</div>
+
+<script>
+    function createBoard(){
+        $.ajax({
+            url:"/api/board/create",
+            method: "GET",
+            data:{
+                title: $("#input_title").val(),
+                content: $("#input_content").val()
+            },
+            success: (data, stauts, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+            error: (data, stauts, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+
+
+    }
+</script>
+
+
+</body>
+</html>

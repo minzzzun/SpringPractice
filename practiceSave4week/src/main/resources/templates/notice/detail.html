@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+
+Notice Detail!! <br/><br/>
+
+title : <input type="text" id="detail_notice_title" class="input_detail"><br/>
+content : <input type="text" id="detail_notice_content" class="input_detail"><br/>
+author : <input type="text" id="detail_notice_author" class="input_detail"><br/>
+
+<button onclick="updateNotice()"> 수정하기</button>
+<button onclick="deleteNotice()"> 삭제하기</button>
+
+
+<script>
+    function getIdFromUrl(){
+        let url = location.href;
+        let lastIndex = url.lastIndexOf("/");
+        let id = url.substring(lastIndex + 1);
+
+        let index2 = url.indexOf("?");
+        if(index2 > -1){
+            id = id.substring(0, index2);
+        }
+        return id;
+    }
+
+    detailNotice(getIdFromUrl());
+
+    function detailNotice(id){
+        $.ajax({
+            url: "/api/notice/detail",
+            method: "GET",
+            data:{
+                id: id
+            },
+            success: (data,status,xhr) => {
+                alert(JSON.stringify(data));
+                let input_detail = $(".input_detail");
+                for(let each of input_detail){
+                    let eachId = $(each).attr("id");
+                    let keyword = eachId.replace("detail_notice_","");
+                    $(each).val(data[keyword]);
+                }
+            },
+            error: (data,status,xhr) => {
+                alert(JSON.stringify(data));
+            }
+        });
+    }
+
+
+    function updateNotice(){
+        let param = {};
+        param["id"] = getIdFromUrl();
+        let input_detail = $(".input_detail");
+        for (let each of input_detail){
+            let eachId = $(each).attr("id");
+            let keyword = eachId.replace("detail_notice_","");
+            param[keyword] = $(each).val();
+        }
+        alert(JSON.stringify(param));
+
+        $.ajax({
+            url:"/api/notice/update",
+            method: "GET",
+            data: param,
+            success: (data,status,xhr) =>{},
+            error: (data,status,xhr) =>{
+                alert(JSON.stringify(data));
+            },
+        });
+    }
+
+    function deleteNotice(){
+        let param = {};
+        param["id"] = getIdFromUrl();
+
+        $.ajax({
+            url: "/api/notice/delete",
+            method: "GET",
+            data: param,
+            success: (data,status, xhr) => {
+            },
+            error: (data,status, xhr) => {
+                alert(JSON.stringify(data));
+        },
+        })
+    }
+</script>
+
+
+
+</body>
+</html>
