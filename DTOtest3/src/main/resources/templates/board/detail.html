@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+</head>
+<body>
+detail
+<div>
+    id : <input type="number" id="input_order"/> <br/>
+    <button onclick="detailBoard()">상세 보기!</button>
+    <br/>
+    <br/>
+    <input type="checkbox" id="detail_board_deleted" /> <br/>
+    <input type="text" id="detail_board_title" /> <br/>
+    <input type="text" id="detail_board_content" /> <br/>
+    <input type="text" id="detail_board_author" /> <br/>
+
+    <button onclick="updateBoard()">수정하기</button>
+    <button onclick="deleteBoard()">삭제하기</button>
+</div>
+
+<script>
+    function deleteBoard(){
+        let _data = {
+            id : $("#input_order").val()
+        };
+        $.ajax({
+            url: "/api/board",
+            method: "DELETE",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify(_data),
+            success: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+            error: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+    }
+    function updateBoard(){
+        let _data = {
+            id : $("#input_order").val()
+            , deleted : $("#detail_board_deleted").prop("checked") // t or f
+            , title : $("#detail_board_title").val()
+            , content : $("#detail_board_content").val()
+        };
+        $.ajax({
+            url: "/api/board",
+            method: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify(_data),
+            success: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+            error: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+    }
+    function detailBoard(){
+        $.ajax({
+            //url: "/api/board/detail/" + $("#input_order").val(),
+            url: "/api/board/detail",
+            method: "GET",
+            data:{
+                id : $("#input_order").val()
+            },
+            success: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+
+                let board = data;
+                $("#detail_board_deleted").prop("checked", board["deleted"]);
+
+                $("#detail_board_title").val(board["title"]);
+                let content = board["content"];
+                $("#detail_board_content").val(content);
+                $("#detail_board_author").val(board["author"]);
+                //$("#p_result").html(result);
+            },
+            error: (data, status, xhr)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+    }
+</script>
+</body>
+</html>
